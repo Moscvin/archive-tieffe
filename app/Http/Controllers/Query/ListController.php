@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Report;
+namespace App\Http\Controllers\Query;
 
 use App\Models\Clienti;
 use App\Models\Report\Report;
@@ -27,9 +27,8 @@ class ListController extends Controller
         $items = $this->reportRepository->getAll();
         $activeTechnicians = $this->userRepository->getActiveTechnicians();
         $title = 'Elenco Rapporti';
-        $link = '/reports_list/';
-        // dd($items);
-        return view('reports.to_check.index', compact('items', 'chars', 'activeTechnicians', 'title', 'link'));
+        $link = '/query/';
+        return view('query.to_check.index', compact('items', 'chars', 'activeTechnicians', 'title', 'link'));
     }
 
     public function show($id)
@@ -39,8 +38,8 @@ class ListController extends Controller
         $item->update(['letto' => 1]);
         //dd($item->letto);
 
-        $link = '/reports_list/';
-        return view('reports.to_check.show', compact('item', 'link'));
+        $link = '/query/';
+        return view('query.to_check.show', compact('item', 'link'));
     }
 
     public function read($id, Request $request)
@@ -66,7 +65,6 @@ class ListController extends Controller
             $statusColor = $item->statusColor;
 
             $data_json[] = [
-                // $item->intervention->location->client->ragione_sociale ?? '',
                 $item->intervention->location->client->ragione_sociale ?? '',
                 $item->formattedDate ?? '',
                 $item->intervention->tipologia ?? '',
@@ -76,12 +74,12 @@ class ListController extends Controller
                 $item->letto ?? '',
             ];
 
-            if (in_array("V", $chars)){
-                array_push($data_json[$index], "<a href=\"/reports_list/$item->id_rapporto/\" class=\"btn btn-xs btn-info\" title=\"Visualizza\"><i class=\"fas fa-eye\"></i></a>");
-            }
-            if (in_array("D", $chars)){
-                array_push($data_json[$index], "<button onclick='deleteItem(this)' data-id=\"".$item->id_rapporto."\" class=\"btn btn-xs btn-warning\" title=\"Elimina\"><i class=\"fas fa-trash\"></i></button>");
-            }
+            // if (in_array("V", $chars)){
+            //     array_push($data_json[$index], "<a href=\"/reports_list/$item->id_rapporto/\" class=\"btn btn-xs btn-info\" title=\"Visualizza\"><i class=\"fas fa-eye\"></i></a>");
+            // }
+            // if (in_array("D", $chars)){
+            //     array_push($data_json[$index], "<button onclick='deleteItem(this)' data-id=\"".$item->id_rapporto."\" class=\"btn btn-xs btn-warning\" title=\"Elimina\"><i class=\"fas fa-trash\"></i></button>");
+            // }
 
             array_push($data_json[$index]);
             $index++;
