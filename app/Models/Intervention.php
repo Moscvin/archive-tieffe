@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Report\Report;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -33,6 +34,15 @@ class Intervention extends Model
     {
         return $this->belongsTo(Location::class, 'id_sede', 'id_sedi');
     }
+    public function report()
+    {
+        return $this->belongsTo(Report::class,'id_intervento','id_intervento');
+    }
+    public function materials()
+    {
+        return $this->hasMany(EquipmentOrderIntervention::class,'id_intervento','id_intervento');
+    }
+
 
     public function getFormattedDateAttribute()
     {

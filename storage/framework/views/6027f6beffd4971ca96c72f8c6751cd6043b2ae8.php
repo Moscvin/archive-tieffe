@@ -1,5 +1,5 @@
 <?php $__env->startSection('content_header'); ?>
-    <h1>Rapporti
+    <h1>Query
         <small></small>
     </h1>
 <?php $__env->stopSection(); ?>
@@ -79,22 +79,7 @@
                                 </span>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-6 col-lg-3">
-                                <label class="col-form-label" for="client">Cliente:</label>
-                                <input name="client" class="form-control" id="client" oninput="getClients(this)" autocomplete="off">
-                                <div class="clientDropbox hidden" id="clientDropbox"></div>
-                            </div>
-
-
-
-
-
-
-
-
-
-
-
+                            <input name="client" id="client" oninput="getClients(this)" style="display: none;">
                             <div class="col-sm-12 col-md-8 col-lg-2" style="margin-top: 24px; float: right;">
                                 <a href="/<?php echo e(Request::path()); ?>" class="btn btn-danger pull-right"><i class="fa fa-sync-alt" aria-hidden="true"></i>&nbsp;Svuota Filtro</a>
                             </div>
@@ -111,10 +96,8 @@
                                     <th>Codice Fiscale</th>
                                     <th>Indirizzo</th>
                                     <th>Tel.</th>
-                                    <th>Email</th>
                                     <th>Note</th>
                                     <th>Tipologia</th>
-                                    <th>Descrizione</th>
                                     <th>Descrizione</th>
                                     <th>Tipologia</th>
                                     <th>Note</th>
@@ -122,7 +105,7 @@
                                     <th>Intervento Numero</th>
                                     <th>Data </th>
                                     <th>Tipologia</th>
-                                    <th>Sede</th>
+                                    
                                     <th>Indirizzo</th>
                                     <th>Rapporto numero</th>
                                     <th>Data</th>
@@ -138,48 +121,11 @@
                                     <th>Quantità</th>
                                     <th>Descrizione</th>
                                     <th>Codice</th>
-                                    <?php if(in_array("V", $chars)): ?>
-                                        <th class="action_btn"></th>
-                                    <?php endif; ?>
-                                    <?php if(in_array("D", $chars)): ?>
-                                        <th class="action_btn"></th>
-                                    <?php endif; ?>
                                 </tr>
                                 </thead>
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="deleteModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-orange">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 class="modal-title">Eliminazione Report</h3>
-                </div>
-                <div class="modal-body">
-                    <h4>Sei sicuro di voler eliminare il report e mettere l'intervento nuovamente in lavorazione?</h4>
-                </div>
-                <div class="modal-footer">
-                    <!-- <button type="button"
-                            class="btn btn-primary confirm-btn confirm-intervento"
-                            data-dismiss="modal"
-                            id="close-btn-intervento"
-                        >Elimina il intervento e rapporto</button> -->
-                    <button type="button"
-                            class="btn btn-danger confirm-btn"
-                            data-dismiss="modal"
-                            id="close-btn"
-                        >Elimina il report</button>
-                    <button type="button"
-                            class="btn btn-warning close-btn pull-left"
-                            data-dismiss="modal">
-                        <i class="fas fa-times"></i>&nbsp;Annulla
-                    </button>
                 </div>
             </div>
         </div>
@@ -264,7 +210,6 @@
                 "iDisplayLength": 15,
                 columnDefs: [
                     { targets: 1, orderable: true},
-                    { targets: 6, visible: false},
                     {
                         targets: 'action_btn',
                         orderable: false
@@ -297,7 +242,7 @@
                 fnRowCallback: function( nRow, aData, iDisplayIndex ) {
                     if (aData[6] == 0) {
                         $('td', nRow).each(function(){
-                            $(this).addClass('text-bold');
+                            return nRow;
                         });
                     }
                     return nRow;
@@ -375,39 +320,5 @@
         }
     </script>
 <?php $__env->stopSection(); ?>
-
-<?php $__env->startPush('js'); ?>
-    <script>
-        var deleteItem = function(context) {
-          var container = document.querySelector('#deleteModal .modal-body b');
-
-          $('#deleteModal').show();
-
-          document.querySelector('#deleteModal .confirm-btn').onclick = function(event){
-            $.ajax({
-                url: '/report/' + context.dataset.id,
-                type: 'delete',
-                success: function(response) {
-                    var table = $('table').DataTable();
-                    table.row($(context.parentElement.parentElement)).remove().draw();
-                    $('#deleteModal').hide();
-                },
-                error: function(error) {
-                    var errorMessage = $("<textarea/>").html('Non può essere eliminata').text();
-                    alert(errorMessage);
-                    $('#deleteModal').hide();
-                }
-            })
-            event.preventDefault();
-            event.stopPropagation();
-          };
-        }
-
-
-        $('.close, .close-btn, .close-btn-intervento').click(function() {
-            $('#deleteModal').hide()
-        });
-    </script>
-<?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('adminlte::page', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

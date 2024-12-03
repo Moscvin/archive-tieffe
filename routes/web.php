@@ -324,21 +324,14 @@ Route::group(['as'=>'import_excel','middleware' => ['auth']],function () {
 Route::group(['as'=>'query', 'middleware' => ['auth'], 'namespace' => 'Query'], function (){
     Route::get('/query/ajax', 'ListController@ajax');
     Route::get('/query', 'ListController@index');
-    Route::get('/query/{id}', 'ListController@show');
-    Route::put('/query/{id}/read', 'ListController@read');
+
 });
 //Download Query
 Route::group(['as'=>'download_pdf'],function(){
     Route::get('/download_pdf/{id}','ReportController@download_pdf');
     Route::get('/pdf/{id}','ReportController@show_pdf');
 });
-//Delete Query
-Route::group(['as'=>'report', 'middleware' => ['auth'], 'namespace' => 'Report'], function (){
-    Route::delete('/report/{id}', 'ReportController@delete');
-});
-//Save query
-Route::get('new_report', 'ReportController@newReport');
-Route::post('saveReportManually', 'ReportController@saveReportManually');
+
 
 
 Route::get('/test1', 'Api\Operation\Report\PhotoControllerTest@main');

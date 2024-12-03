@@ -32,7 +32,9 @@ class Location extends Model
     public function machineries() {
         return $this->hasMany('App\Models\Machinery', 'id_sedi');
     }
-
+    public function macchinari(){
+        return $this->belongsTo('App\Models\Machinery', 'id_sedi');
+    }
     public function operations() {
         return $this->hasMany(Operation::class, 'id_sede');
     }

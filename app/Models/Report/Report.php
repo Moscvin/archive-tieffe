@@ -68,7 +68,6 @@ class Report extends Model
     public function intervention() {
         return $this->belongsTo(Intervention::class, 'id_intervento', 'id_intervento');
     }
-
     public function equipments()
     {
         return $this->hasMany(EquipmentOrderIntervention::class, 'id_intervento', 'id_intervento');

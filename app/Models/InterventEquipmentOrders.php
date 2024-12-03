@@ -16,6 +16,9 @@ class InterventEquipmentOrders extends Model
         'quantita'
     ];
 
+    public function intervention() {
+        return $this->belongsTo(Intervention::class, 'id_intervento', 'id_intervento');
+    }
     public function setCodiceAttribute($value)
     {
         $this->attributes['codice'] = substr($value, 0, 100);
