@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MaterialRequest;
 use Google\Auth\Cache\Item;
+use App\Models\EquipmentOrderIntervention;
 
 class ListController extends Controller
 {
@@ -57,14 +58,12 @@ class ListController extends Controller
     {
         $chars = preg_split('//', \Request::get('permissionAttribute'), -1, PREG_SPLIT_NO_EMPTY);
 
-        $data = $this->reportRepository->getFiltered($request->all());
-        $index = 0;
+    
         $data_json = [];
-        foreach ($data->items as $item) {
-            foreach ($item->intervention->materials as $material) {
-            }
+        $query = EquipmentOrderIntervention::with('intervention')->get();
 
-            $statusColor = $item->statusColor;
+
+        foreach ($query as $item) {
             $data_json[] = [
                 $item->intervention->location->client->ragione_sociale ?? '',
                 $item->intervention->location->client->committente ?? '',
@@ -83,7 +82,9 @@ class ListController extends Controller
                 $item->intervention->tipologia ?? '',
                 $item->intervention->location->address ?? '',
                 $item->intervention->report->id_rapporto ?? '',
+                // $item->intervention->report->data_invio ? date('d/m/Y', strtotime($item->intervention->report->data_invio)) : '' , 
                 $item->intervention->report->data_invio ?? '',
+                // " ",
                 $item->intervention->report->garanzia ?? '',
                 $item->intervention->report->dafatturare ?? '',
                 $item->intervention->cestello ?? '',
@@ -93,15 +94,15 @@ class ListController extends Controller
                 $item->intervention->report->incasso_con_assegno ?? '',
                 $item->intervention->report->note_riparazione ?? '',
                 $item->intervention->report->stato ?? '',
-
+                $item->quantita ?? '',
+                $item->descrizione ?? '',
+                $item->codice ?? '',
             ];
-            array_push($data_json[$index]);
-            $index++;
         }
         return response()->json([
             'draw' => $request->draw ?? 1,
-            'recordsTotal' => $data->recordsTotal,
-            'recordsFiltered' => $data->recordsFiltered,
+            'recordsTotal' => (clone $query)->count(),
+            'recordsFiltered' => $query->count(),
             "data" => $data_json,
         ]);
     }

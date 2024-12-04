@@ -21,4 +21,7 @@ class EquipmentOrderIntervention extends Model
     public function orderWork() {
         return $this->belongsTo(OrdersWork::class, 'id_lavoro', 'id_lavoro');
     }
+    public function intervention() {
+        return $this->belongsTo(Intervention::class, 'id_intervento', 'id_intervento');
+    }
 }

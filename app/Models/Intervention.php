@@ -40,7 +40,7 @@ class Intervention extends Model
     }
     public function materials()
     {
-        return $this->hasMany(EquipmentOrderIntervention::class,'id_intervento','id_intervento');
+        return $this->belongsTo(EquipmentOrderIntervention::class,'id_intervento','id_intervento');
     }
 
 
