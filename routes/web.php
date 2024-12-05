@@ -326,11 +326,6 @@ Route::group(['as'=>'query', 'middleware' => ['auth'], 'namespace' => 'Query'], 
     Route::get('/query', 'ListController@index');
 
 });
-//Download Query
-Route::group(['as'=>'download_pdf'],function(){
-    Route::get('/download_pdf/{id}','ReportController@download_pdf');
-    Route::get('/pdf/{id}','ReportController@show_pdf');
-});
 
 
 

@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Query;
 
-use App\Models\Clienti;
-use App\Models\Report\Report;
 use App\Repositories\ReportRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MaterialRequest;
-use Google\Auth\Cache\Item;
 use App\Models\EquipmentOrderIntervention;
+use App\Models\Intervention;
 
 class ListController extends Controller
 {
@@ -34,76 +30,73 @@ class ListController extends Controller
         return view('query.to_check.index', compact('items', 'chars', 'activeTechnicians', 'title', 'link'));
     }
 
-    // public function show($id)
-    // {
-    //     $item = $this->reportRepository->getById($id) ?? abort(404);
-
-    //     $item->update(['letto' => 1]);
-    //     //dd($item->letto);
-
-    //     $link = '/query/';
-    //     return view('query.to_check.show', compact('item', 'link'));
-    // }
-
-    // public function read($id, Request $request)
-    // {
-    //     $item = $this->reportRepository->getById($id) ?? abort(404);
-    //     $status = $item->update(['letto' => 0]);
-    //     return response()->json([
-    //         'status' => $status,
-    //         'debug' => $item
-    //     ], 200);
-    // }
     public function ajax(Request $request)
     {
         $chars = preg_split('//', \Request::get('permissionAttribute'), -1, PREG_SPLIT_NO_EMPTY);
 
-    
-        $data_json = [];
-        $query = EquipmentOrderIntervention::with('intervention')->get();
 
+        $data_json = [];
+        $time = time();
+        $query = Intervention::when($request->dateFrom, function ($q) use ($request) {
+            $date = date('Y-m-d', strtotime(str_replace('/', '-', $request->dateFrom)));
+            $q->where('data', '>=', $date);
+        })->when($request->dateTo, function ($q) use ($request) {
+            $date = date('Y-m-d', strtotime(str_replace('/', '-', $request->dateTo)));
+            $q->where('data', '<=', $date);
+        })->get();
+        // dd($query);
+
+        $time2 = time() - $time;
 
         foreach ($query as $item) {
+
             $data_json[] = [
-                $item->intervention->location->client->ragione_sociale ?? '',
-                $item->intervention->location->client->committente ?? '',
-                $item->intervention->location->client->partita_iva ?? '',
-                $item->intervention->location->client->codice_fiscale ?? '',
-                $item->intervention->location->address ?? '',
-                $item->intervention->location->phones ?? '',
-                $item->intervention->location->note ?? '',
-                $item->intervention->location->tipologia ?? '',
-                $item->intervention->location->macchinari->descrizione ?? '',
-                $item->intervention->location->macchinari->tipologia ?? '',
-                $item->intervention->location->macchinari->note ?? '',
-                $item->intervention->location->macchinari->tetto ?? '',
-                $item->intervention->id_intervento ?? '',
-                $item->intervention->data ?? '',
-                $item->intervention->tipologia ?? '',
-                $item->intervention->location->address ?? '',
-                $item->intervention->report->id_rapporto ?? '',
-                // $item->intervention->report->data_invio ? date('d/m/Y', strtotime($item->intervention->report->data_invio)) : '' , 
-                $item->intervention->report->data_invio ?? '',
-                // " ",
-                $item->intervention->report->garanzia ?? '',
-                $item->intervention->report->dafatturare ?? '',
-                $item->intervention->cestello ?? '',
-                $item->intervention->report->aggiuntivo ?? '',
-                $item->intervention->report->incasso_pos ?? '',
-                $item->intervention->report->incasso_in_contanti ?? '',
-                $item->intervention->report->incasso_con_assegno ?? '',
-                $item->intervention->report->note_riparazione ?? '',
-                $item->intervention->report->stato ?? '',
-                $item->quantita ?? '',
-                $item->descrizione ?? '',
-                $item->codice ?? '',
+                $item->location->client->ragione_sociale ?? '',
+                ($item->location->client->committente ?? null) === 1 ? 'Si' : 'No',
+                $item->location->client->partita_iva ?? '',
+                $item->location->client->codice_fiscale ?? '',
+                $item->location->address ?? '',
+                $item->location->phones ?? '',
+                $item->location->note ?? '',
+                $item->location->tipologia ?? '',
+                $item->location->macchinari->descrizione ?? '',
+                $item->location->macchinari->tipologia ?? '',
+                $item->location->macchinari->note ?? '',
+                $item->location->macchinari->tetto ?? '',
+                $item->id_intervento ?? '',
+                // $item->data ? date('d/m/Y',strtotime($item->data)) : '',
+                $item->data ?? '',
+                $item->tipologia ?? '',
+                $item->location->address ?? '',
+                $item->report->id_rapporto ?? '',
+                // $item->report->data_invio ? date('d/m/Y', strtotime($item->report->data_invio)) : '' , 
+                $item->report->data_invio ?? '',
+                $item->report->garanzia ?? '',
+                $item->report->dafatturare ?? '',
+                $item->cestello ?? '',
+                $item->report->aggiuntivo ?? '',
+                $item->report->incasso_pos ?? '',
+                $item->report->incasso_in_contanti ?? '',
+                $item->report->incasso_con_assegno ?? '',
+                $item->report->note_riparazione ?? '',
+                $item->report->stato ?? '',
+                $item->materials->quantita ?? '',
+                $item->materials->descrizione ?? '',
+                $item->materials->codice ?? '',
             ];
         }
+        $time3 = time() - $time;
+
         return response()->json([
             'draw' => $request->draw ?? 1,
             'recordsTotal' => (clone $query)->count(),
             'recordsFiltered' => $query->count(),
             "data" => $data_json,
+            "times" => [
+                '1' => $time,
+                '2' => $time2,
+                '3' => $time3
+            ]
         ]);
     }
 }

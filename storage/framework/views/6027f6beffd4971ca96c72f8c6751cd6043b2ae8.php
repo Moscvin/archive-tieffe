@@ -60,7 +60,7 @@
                             <div class="col-sm-6 col-md-6 col-lg-2">
                                 <label class="col-form-label" for="dateFrom">Data dal:</label>
                                 <div class="input-group date">
-                                    <?php echo Form::text('dateFrom', null,
+                                    <?php echo Form::text('dateFrom', date('01/m/Y'),
                                         ['class' => 'form-control', 'autocomplete' => 'off', 'name' => 'dateFrom', 'id' => 'dateFrom', 'onchange' => 'filterTable()']); ?>
 
                                     <span class="input-group-addon">
@@ -71,7 +71,7 @@
                             <div class="col-sm-6 col-md-6 col-lg-2">
                                 <label class="col-form-label" for="dateTo">Data al:</label>
                                 <div class="input-group date">
-                                    <?php echo Form::text('dateTo', null,
+                                    <?php echo Form::text('dateTo', date('t/m/Y'),
                                         ['class' => 'form-control', 'autocomplete' => 'off', 'name' => 'dateTo', 'id' => 'dateTo', 'onchange' => 'filterTable()']); ?>
 
                                     <span class="input-group-addon">
@@ -111,7 +111,7 @@
                                     <th>Data</th>
                                     <th>Garanzia</th>
                                     <th>Intervento da fatturare</th>
-                                    <th>Cestello</th>
+                                    <th> Intervento aggiuntivo</th>
                                     <th>Intervento aggiuntivo</th>
                                     <th>Incasso POS</th>
                                     <th>Incass contanti</th>
@@ -140,30 +140,9 @@
     <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-ajax-downloader@1.1.0/src/ajaxdownloader.min.js"></script>
     <script>
 
-        $.fn.dataTable.ext.search.push(
-            function(settings, data, dataIndex) {
-                let technicianName = $('[name=technicianName] option:selected').text(),
-                    client = $('[name=client]').val(),
-                    dateFrom = new Date($('[name=dateFrom]').val().replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1")),
-                    dateTo = new Date($('[name=dateTo]').val().replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1")),
-                    date = new Date(data[1].replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1"));
-                if(data[2].match(new RegExp(technicianName, 'i')) &&
-                    data[0].match(new RegExp(client, 'i')) && (
-                    (!$('[name=dateFrom]').val() && !$('[name=dateTo]').val()) ||
-                    (!$('[name=dateFrom]').val() && date <= dateTo) ||
-                    (dateFrom <= date && !$('[name=dateTo]').val()) ||
-                    (dateFrom <= date && date <= dateTo)
-                )) {
-                    return true;
-                }
-                return false;
-            }
-        );
-
         var filterTable = function() {
-            compareDates();
             var table = $('#reportsTable').DataTable();
-            table.draw();
+            table.ajax.reload();
         }
 
 
@@ -174,16 +153,15 @@
                 //searching: true,
                 ordering: true,
                 ajax: {
+                  
                     url: '/query/ajax',
+                   
                     data: function(data) {
-                        data.client = document.getElementById('client').value;
-                        //  data.technicianName = document.getElementById('technicianName').value;
+
                         data.dateTo = document.getElementById('dateTo').value;
                         data.dateFrom = document.getElementById('dateFrom').value;
                     }
                 },
-                processing: true,
-                serverSide: true,
                 dom: "lBfrtip",
                 idSrc: "id",
                 lengthMenu: [ 15, 25, 50, 75, 100 ],
@@ -255,16 +233,6 @@
                 }
             });
         });
-
-        var compareDates = function () {
-            let dateFrom = new Date($('[name=dateFrom]').val().replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1")),
-                dateTo = new Date($('[name=dateTo]').val().replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1"));
-            if ($('[name=dateFrom]').val() && $('[name=dateTo]').val() && dateFrom > dateTo) {
-                $('[name=dateFrom]').val('');
-                $('[name=dateTo]').val('');
-                alert('La data di fine evento non può essere antecedente alla data di inizio.');
-            }
-        }
 
         $('.date').datepicker({
             language: 'it',

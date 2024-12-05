@@ -34,6 +34,7 @@ class PermissionManagement
 
             $user_id = Auth::id();
             $routeName= $request->route()->getName();
+            
             $core_menu = CoreMenu::where('link', $routeName)->orWhere('link', 'like', '%' . $routeName )->get();
             if ($core_menu->count() == 0){
                 return $next($request);
