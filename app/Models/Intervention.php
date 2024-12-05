@@ -36,11 +36,15 @@ class Intervention extends Model
     }
     public function report()
     {
-        return $this->belongsTo(Report::class,'id_intervento','id_intervento');
+        return $this->belongsTo(Report::class, 'id_intervento', 'id_intervento');
     }
     public function materials()
     {
-        return $this->belongsTo(EquipmentOrderIntervention::class,'id_intervento','id_intervento');
+        return $this->belongsTo(EquipmentOrderIntervention::class, 'id_intervento', 'id_intervento');
+    }
+    public function intervention()
+    {
+        return $this->belongsTo(Intervention::class, 'id_intervento', 'id_intervento');
     }
 
 

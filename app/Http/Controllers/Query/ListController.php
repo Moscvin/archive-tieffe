@@ -27,7 +27,7 @@ class ListController extends Controller
         $activeTechnicians = $this->userRepository->getActiveTechnicians();
         $title = 'Elenco Rapporti';
         $link = '/query/';
-        return view('query.to_check.index', compact('items', 'chars', 'activeTechnicians', 'title', 'link'));
+        return view('query.index', compact('items', 'chars', 'activeTechnicians', 'title', 'link'));
     }
 
     public function ajax(Request $request)
@@ -49,6 +49,9 @@ class ListController extends Controller
         $time2 = time() - $time;
 
         foreach ($query as $item) {
+            if($item->report == null) {
+                continue;
+            }
 
             $data_json[] = [
                 $item->location->client->ragione_sociale ?? '',
@@ -73,7 +76,7 @@ class ListController extends Controller
                 $item->report->data_invio ?? '',
                 $item->report->garanzia ?? '',
                 $item->report->dafatturare ?? '',
-                $item->cestello ?? '',
+                // $item->cestello ?? '',
                 $item->report->aggiuntivo ?? '',
                 $item->report->incasso_pos ?? '',
                 $item->report->incasso_in_contanti ?? '',
