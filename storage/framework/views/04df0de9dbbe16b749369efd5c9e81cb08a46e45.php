@@ -160,6 +160,7 @@
     <script>
         var filterTable = function() {
             var table = $('#reportsTable').DataTable();
+            table.column(0).title('New title', 1);
             table.ajax.reload();
         }
 
@@ -232,7 +233,7 @@
                         title: '<?php echo e($title); ?>'
                     },
                     {
-                        extend: 'excel',
+                        extend: 'csv',
                         className: 'btn btn-success btn-sm pull-right margin-button',
                         text: "<i class='fa fa-download' title='Download'></i>",
                         exportOptions: {
@@ -246,7 +247,7 @@
                                 }
                             }
                         },
-                        title: null,
+                        title:null,
                         filename: function() {
                             const query = "Query"; 
                             const today = new Date();
