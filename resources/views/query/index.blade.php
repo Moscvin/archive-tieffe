@@ -16,30 +16,38 @@
             max-height: 300px;
             overflow-y: auto;
         }
+
         .client-item {
             cursor: pointer;
             padding: 10px;
         }
+
         form {
             margin-bottom: 24px;
         }
+
         select {
             width: 100% !important;
         }
+
         .bordered {
             border: 1px solid #00a65a;
         }
+
         .not_completed {
             background-color: #170fb9 !important;
             color: #fff;
         }
+
         .not_completed:hover {
             color: #000;
         }
+
         .canceled {
             background-color: #d60505 !important;
             color: #fff;
         }
+
         .canceled:hover {
             color: #000;
         }
@@ -55,72 +63,84 @@
 
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3>{{$title ?? 'Rapporti'}}</h3>
+                        <h3>{{ $title ?? 'Rapporti' }}</h3>
                     </div>
                     <div class="box-body bordered">
                         <form class="row">
                             <div class="col-sm-6 col-md-6 col-lg-2">
                                 <label class="col-form-label" for="dateFrom">Data dal:</label>
                                 <div class="input-group date">
-                                    {!! Form::text('dateFrom', date('01/m/Y'),
-                                        ['class' => 'form-control', 'autocomplete' => 'off', 'name' => 'dateFrom', 'id' => 'dateFrom', 'onchange' => 'filterTable()']) !!}
+                                    {!! Form::text('dateFrom', date('01/m/Y'), [
+                                        'class' => 'form-control',
+                                        'autocomplete' => 'off',
+                                        'name' => 'dateFrom',
+                                        'id' => 'dateFrom',
+                                        'onchange' => 'filterTable()',
+                                    ]) !!}
                                     <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-2">
                                 <label class="col-form-label" for="dateTo">Data al:</label>
                                 <div class="input-group date">
-                                    {!! Form::text('dateTo', date('t/m/Y'),
-                                        ['class' => 'form-control', 'autocomplete' => 'off', 'name' => 'dateTo', 'id' => 'dateTo', 'onchange' => 'filterTable()']) !!}
+                                    {!! Form::text('dateTo', date('t/m/Y'), [
+                                        'class' => 'form-control',
+                                        'autocomplete' => 'off',
+                                        'name' => 'dateTo',
+                                        'id' => 'dateTo',
+                                        'onchange' => 'filterTable()',
+                                    ]) !!}
                                     <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
                                 </div>
                             </div>
                             <input name="client" id="client" oninput="getClients(this)" style="display: none;">
                             <div class="col-sm-12 col-md-8 col-lg-2" style="margin-top: 24px; float: right;">
-                                <a href="/{{Request::path()}}" class="btn btn-danger pull-right"><i class="fa fa-sync-alt" aria-hidden="true"></i>&nbsp;Svuota Filtro</a>
+                                <a href="/{{ Request::path() }}" class="btn btn-danger pull-right"><i class="fa fa-sync-alt"
+                                        aria-hidden="true"></i>&nbsp;Svuota Filtro</a>
                             </div>
                         </form>
                     </div>
                     <div class="box-body">
                         <div class="table-responsive">
-                            <table class="table table-responsive table-bordered table-hover table-condensed" id="reportsTable">
+                            <table class="table table-responsive table-bordered table-hover table-condensed"
+                                id="reportsTable">
                                 <thead>
-                                <tr>
-                                    <th>Ragione Sociale</th>
-                                    <th>Committente</th>
-                                    <th>Partita Iva</th>
-                                    <th>Codice Fiscale</th>
-                                    <th>Indirizzo</th>
-                                    <th>Tel.</th>
-                                    <th>Note</th>
-                                    <th>Tipologia</th>
-                                    <th>Descrizione</th>
-                                    <th>Tipologia</th>
-                                    <th>Note</th>
-                                    <th>Posizionato sul tetto</th>
-                                    <th>Intervento Numero</th>
-                                    <th>Data </th>
-                                    <th>Tipologia</th>
-                                    {{-- <th>Sede</th> --}}
-                                    <th>Indirizzo</th>
-                                    <th>Rapporto numero</th>
-                                    <th>Data</th>
-                                    <th>Garanzia</th>
-                                    <th>Intervento da fatturare</th>
-                                    <th>Intervento aggiuntivo</th>
-                                    <th>Incasso POS</th>
-                                    <th>Incass contanti</th>
-                                    <th>Incasso assegno</th>
-                                    <th>note_riparazione</th>
-                                    <th>Stato</th>
-                                    <th>Quantità</th>
-                                    <th>Descrizione</th>
-                                    <th>Codice</th>
-                                </tr>
+                                    <tr>
+                                        <th>Ragione Sociale</th>
+                                        <th>Committente</th>
+                                        <th>Partita Iva</th>
+                                        <th>Codice Fiscale</th>
+                                        <th>Indirizzo</th>
+                                        <th>Tel.</th>
+                                        <th>Note</th>
+                                        <th>Tipologia</th>
+                                        <th>Descrizione</th>
+                                        <th>Tipologia</th>
+                                        <th>Note</th>
+                                        <th>Posizionato sul tetto</th>
+                                        <th>Intervento Numero</th>
+                                        <th>Data </th>
+                                        <th>Tipologia</th>
+                                        {{-- <th>Sede</th> --}}
+                                        <th>Indirizzo</th>
+                                        <th>Rapporto numero</th>
+                                        <th>Data</th>
+                                        <th>Garanzia</th>
+                                        <th>Intervento da fatturare</th>
+                                        <th>Intervento aggiuntivo</th>
+                                        <th>Incasso POS</th>
+                                        <th>Incasso contanti</th>
+                                        <th>Incasso assegno</th>
+                                        <th>note_riparazione</th>
+                                        <th>Stato</th>
+                                        <th>Quantità</th>
+                                        <th>Descrizione</th>
+                                        <th>Codice</th>
+                                    </tr>
                                 </thead>
                             </table>
                         </div>
@@ -136,25 +156,25 @@
     <script src="/js/bootstrap-datepicker.it.min.js"></script>
     <script src="/js/moment.js"></script>
     <script src="/js/datetime-moment.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-ajax-downloader@1.1.0/src/ajaxdownloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-ajax-downloader@1.1.0/src/ajaxdownloader.min.js">
+    </script>
     <script>
-
         var filterTable = function() {
             var table = $('#reportsTable').DataTable();
             table.ajax.reload();
         }
 
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             //$.fn.dataTable.moment( 'DD/MM/Y' );
 
             $('#reportsTable').DataTable({
                 //searching: true,
                 ordering: true,
                 ajax: {
-                  
+
                     url: '/query/ajax',
-                   
+
                     data: function(data) {
 
                         data.dateTo = document.getElementById('dateTo').value;
@@ -163,30 +183,32 @@
                 },
                 dom: "lBfrtip",
                 idSrc: "id",
-                lengthMenu: [ 15, 25, 50, 75, 100 ],
+                lengthMenu: [15, 25, 50, 75, 100],
                 language: {
-                    decimal:        "",
-                    emptyTable:     "Nessun dato disponibile",
-                    info:           "Righe _START_ - _END_ di _TOTAL_ totali",
-                    infoEmpty:      "Nessun record",
-                    infoFiltered:   "(su _MAX_ righe complessive)",
-                    infoPostFix:    "",
-                    thousands:      ",",
-                    lengthMenu:     "Mostra _MENU_ righe",
+                    decimal: "",
+                    emptyTable: "Nessun dato disponibile",
+                    info: "Righe _START_ - _END_ di _TOTAL_ totali",
+                    infoEmpty: "Nessun record",
+                    infoFiltered: "(su _MAX_ righe complessive)",
+                    infoPostFix: "",
+                    thousands: ",",
+                    lengthMenu: "Mostra _MENU_ righe",
                     loadingRecords: "...",
-                    processing:     "...",
-                    search:         "Cerca:",
-                    zeroRecords:    "Nessun dato corrisponde ai criteri impostati",
+                    processing: "...",
+                    search: "Cerca:",
+                    zeroRecords: "Nessun dato corrisponde ai criteri impostati",
                     paginate: {
-                        first:      "Primo",
-                        last:       "Ultimo",
-                        next:       "Succ.",
-                        previous:   "Prec."
+                        first: "Primo",
+                        last: "Ultimo",
+                        next: "Succ.",
+                        previous: "Prec."
                     },
                 },
                 "iDisplayLength": 15,
-                columnDefs: [
-                    { targets: 1, orderable: true},
+                columnDefs: [{
+                        targets: 1,
+                        orderable: true
+                    },
                     {
                         targets: 'action_btn',
                         orderable: false
@@ -196,9 +218,10 @@
                         className: "action_btn",
                     }
                 ],
-                order: [[1, "desc"]], //[4, "desc"]],
-                buttons: [
-                    {
+                order: [
+                    [1, "desc"]
+                ], //[4, "desc"]],
+                buttons: [{
                         extend: 'print',
                         className: 'btn btn-primary btn-sm pull-right margin-button',
                         text: "<i class='fa fa-print' title='stampa'></i>",
@@ -207,18 +230,32 @@
                                 "thead th:not(.action_btn):not(.hidden)",
                             ]
                         },
-                        title: '{{$title}}'
+                        title: '{{ $title }}'
                     },
                     {
                         extend: 'excel',
                         className: 'btn btn-success btn-sm pull-right margin-button',
                         text: "<i class='fa fa-download' title='Download'></i>",
-                        title: '{{$title}}'
+                        exportOptions: {
+                            columns: ':visible',
+                            format: {
+                                body: function(data, row, column, node) {
+
+                                    if (/^\d+,\d{2}$/.test(data)) {
+                                        return `\u200C${data}`;
+                                    }
+                                    return data;
+                                }
+                            }
+                        },
+                        title: null
                     },
+
+
                 ],
-                fnRowCallback: function( nRow, aData, iDisplayIndex ) {
+                fnRowCallback: function(nRow, aData, iDisplayIndex) {
                     if (aData[6] == 0) {
-                        $('td', nRow).each(function(){
+                        $('td', nRow).each(function() {
                             return nRow;
                         });
                     }
@@ -250,7 +287,7 @@
         }
 
         var getClients = function(context) {
-            if(context.value.length < 3) {
+            if (context.value.length < 3) {
                 document.getElementById('clientDropbox').classList.add('hidden');
                 document.getElementById('clientDropbox').innerHTML = '';
                 filterTable();
@@ -271,7 +308,7 @@
             }).then(function(response) {
                 document.getElementById('clientDropbox').classList.add('hidden');
                 document.getElementById('clientDropbox').innerHTML = '';
-                if(response.length) {
+                if (response.length) {
                     response.forEach(function(item) {
                         var option = document.createElement('div');
                         option.innerHTML = item.ragione_sociale;

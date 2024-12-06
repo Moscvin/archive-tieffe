@@ -43,51 +43,82 @@ class ListController extends Controller
         })->when($request->dateTo, function ($q) use ($request) {
             $date = date('Y-m-d', strtotime(str_replace('/', '-', $request->dateTo)));
             $q->where('data', '<=', $date);
-        })->get();
-        // dd($query);
+        })->whereHas('report')->get();
 
         $time2 = time() - $time;
 
         foreach ($query as $item) {
-            if($item->report == null) {
-                continue;
-            }
+            if ($item->materials->isEmpty()) {
 
-            $data_json[] = [
-                $item->location->client->ragione_sociale ?? '',
-                ($item->location->client->committente ?? null) === 1 ? 'Si' : 'No',
-                $item->location->client->partita_iva ?? '',
-                $item->location->client->codice_fiscale ?? '',
-                $item->location->address ?? '',
-                $item->location->phones ?? '',
-                $item->location->note ?? '',
-                $item->location->tipologia ?? '',
-                $item->location->macchinari->descrizione ?? '',
-                $item->location->macchinari->tipologia ?? '',
-                $item->location->macchinari->note ?? '',
-                $item->location->macchinari->tetto ?? '',
-                $item->id_intervento ?? '',
-                // $item->data ? date('d/m/Y',strtotime($item->data)) : '',
-                $item->data ?? '',
-                $item->tipologia ?? '',
-                $item->location->address ?? '',
-                $item->report->id_rapporto ?? '',
-                // $item->report->data_invio ? date('d/m/Y', strtotime($item->report->data_invio)) : '' , 
-                $item->report->data_invio ?? '',
-                $item->report->garanzia ?? '',
-                $item->report->dafatturare ?? '',
-                // $item->cestello ?? '',
-                $item->report->aggiuntivo ?? '',
-                $item->report->incasso_pos ?? '',
-                $item->report->incasso_in_contanti ?? '',
-                $item->report->incasso_con_assegno ?? '',
-                $item->report->note_riparazione ?? '',
-                $item->report->stato ?? '',
-                $item->materials->quantita ?? '',
-                $item->materials->descrizione ?? '',
-                $item->materials->codice ?? '',
-            ];
+                $data_json[] = [
+                    $item->location->client->ragione_sociale ?? '',
+                    ($item->location->client->committente ?? null) === 1 ? 'Si' : 'No',
+                    $item->location->client->partita_iva ?? '',
+                    $item->location->client->codice_fiscale ?? '',
+                    $item->location->address ?? '',
+                    $item->location->phones ?? '',
+                    $item->location->note ?? '',
+                    $item->location->tipologia ?? '',
+                    $item->location->macchinari->descrizione ?? '',
+                    $item->location->macchinari->tipologia ?? '',
+                    $item->location->macchinari->note ?? '',
+                    ($item->location->macchinari->tetto ?? null) === 1 ? 'Si' : 'No',
+                    $item->id_intervento ?? '',
+                    $item->data ? date('d/m/Y', strtotime($item->data)) : '',
+                    $item->tipologia ?? '',
+                    $item->location->address ?? '',
+                    $item->report->id_rapporto ?? '',
+                    $item->report->data_invio ? date('d/m/Y', strtotime($item->report->data_invio)) : '',
+                    ($item->report->garanzia ?? null) === 1 ? 'Si' : 'No',
+                    ($item->report->dafatturare ?? null) === 1 ? 'Si' : 'No',
+                    ($item->report->aggiuntivo ?? null)  === 1 ? 'Si' : 'No',
+                    number_format($item->report->incasso_pos ?? 0, 2, ',', '.') ?? '',
+                    number_format($item->report->incasso_in_contanti ?? 0, 2, ',', '.') ?? '',
+                    number_format($item->report->incasso_con_assegno ?? 0, 2, ',', '.') ?? '',
+                    $item->report->note_riparazione ?? '',
+                    ($item->report->stato ?? null) === 2 ? 'Completato' : 'Non Completato',
+                    '',
+                    '',
+                    '',
+                ];
+            } else {
+                foreach ($item->materials as $material) {
+                    $data_json[] = [
+                        $item->location->client->ragione_sociale ?? '',
+                        ($item->location->client->committente ?? null) === 1 ? 'Si' : 'No',
+                        $item->location->client->partita_iva ?? '',
+                        $item->location->client->codice_fiscale ?? '',
+                        $item->location->address ?? '',
+                        $item->location->phones ?? '',
+                        $item->location->note ?? '',
+                        $item->location->tipologia ?? '',
+                        $item->location->macchinari->descrizione ?? '',
+                        $item->location->macchinari->tipologia ?? '',
+                        $item->location->macchinari->note ?? '',
+                        ($item->location->macchinari->tetto ?? null) === 1 ? 'Si' : 'No',
+                        $item->id_intervento ?? '',
+                        $item->data ? date('d/m/Y', strtotime($item->data)) : '',
+                        $item->tipologia ?? '',
+                        $item->location->address ?? '',
+                        $item->report->id_rapporto ?? '',
+                        $item->report->data_invio ? date('d/m/Y', strtotime($item->report->data_invio)) : '',
+                        ($item->report->garanzia ?? null) === 1 ? 'Si' : 'No',
+                        ($item->report->dafatturare ?? null) === 1 ? 'Si' : 'No',
+                        ($item->report->aggiuntivo ?? null)  === 1 ? 'Si' : 'No',
+                        number_format($item->report->incasso_pos ?? 0, 2, ',', '.') ?? '',
+                        number_format($item->report->incasso_in_contanti ?? 0, 2, ',', '.') ?? '',
+                        number_format($item->report->incasso_con_assegno ?? 0, 2, ',', '.') ?? '',
+                        $item->report->note_riparazione ?? '',
+                        ($item->report->stato ?? null) === 2 ? 'Completato' : 'Non Completato',
+                        $material->quantita ?? '',
+                        $material->descrizione ?? '',
+                        $material->codice ?? '',
+                    ];
+                }
+            }
         }
+        
+        // dd($data_json);
         $time3 = time() - $time;
 
         return response()->json([
