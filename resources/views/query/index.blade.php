@@ -125,7 +125,6 @@
                                         <th>Intervento Numero</th>
                                         <th>Data </th>
                                         <th>Tipologia</th>
-                                        {{-- <th>Sede</th> --}}
                                         <th>Indirizzo</th>
                                         <th>Rapporto numero</th>
                                         <th>Data</th>
@@ -220,7 +219,7 @@
                 ],
                 order: [
                     [1, "desc"]
-                ], //[4, "desc"]],
+                ],
                 buttons: [{
                         extend: 'print',
                         className: 'btn btn-primary btn-sm pull-right margin-button',
@@ -240,7 +239,6 @@
                             columns: ':visible',
                             format: {
                                 body: function(data, row, column, node) {
-
                                     if (/^\d+,\d{2}$/.test(data)) {
                                         return `\u200C${data}`;
                                     }
@@ -248,7 +246,13 @@
                                 }
                             }
                         },
-                        title: null
+                        title: null,
+                        filename: function() {
+                            const query = "Query"; 
+                            const today = new Date();
+                            const formattedDate = today.toISOString().split('T')[0];
+                            return `${query} - ${formattedDate}`;
+                        }
                     },
 
 

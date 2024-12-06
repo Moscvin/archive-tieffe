@@ -25,7 +25,7 @@ class ListController extends Controller
         $chars = preg_split('//', \Request::get('permissionAttribute'), -1, PREG_SPLIT_NO_EMPTY);
         $items = $this->reportRepository->getAll();
         $activeTechnicians = $this->userRepository->getActiveTechnicians();
-        $title = 'Elenco Rapporti';
+        $title = 'Query Rapporti';
         $link = '/query/';
         return view('query.index', compact('items', 'chars', 'activeTechnicians', 'title', 'link'));
     }
