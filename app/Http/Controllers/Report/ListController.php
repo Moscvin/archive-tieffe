@@ -66,9 +66,9 @@ class ListController extends Controller
             $statusColor = $item->statusColor;
 
             $data_json[] = [
-                // $item->intervention->location->client->ragione_sociale ?? '',
                 $item->intervention->location->client->ragione_sociale ?? '',
                 $item->formattedDate ?? '',
+                $item->intervention->formattedDate ?? '',
                 $item->intervention->tipologia ?? '',
                 $item->technicianNames ?? '',
                 $item->reportNumber ?? '',

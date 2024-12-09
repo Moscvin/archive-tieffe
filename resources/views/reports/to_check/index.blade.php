@@ -84,17 +84,6 @@
                                 <input name="client" class="form-control" id="client" oninput="getClients(this)" autocomplete="off">
                                 <div class="clientDropbox hidden" id="clientDropbox"></div>
                             </div>
-{{--                            <div class="col-sm-6 col-md-6 col-lg-3">--}}
-{{--                                <label class="col-form-label" for="technicianName">Tecnico:</label>--}}
-{{--                                <select name="technicianName" id="technicianName" class="form-control" onchange="filterTable()">--}}
-{{--                                    <option></option>--}}
-{{--                                    @if($activeTechnicians)--}}
-{{--                                        @foreach ($activeTechnicians as $technician)--}}
-{{--                                            <option value="{{$technician->id_user}}">{{$technician->name . ' ' . $technician->family_name}}</option>--}}
-{{--                                        @endforeach--}}
-{{--                                    @endif--}}
-{{--                                </select>--}}
-{{--                            </div>--}}
                             <div class="col-sm-12 col-md-8 col-lg-2" style="margin-top: 24px; float: right;">
                                 <a href="/{{Request::path()}}" class="btn btn-danger pull-right"><i class="fa fa-sync-alt" aria-hidden="true"></i>&nbsp;Svuota Filtro</a>
                             </div>
@@ -106,6 +95,7 @@
                                 <thead>
                                 <tr>
                                     <th>Cliente</th>
+                                    <th>Data Rapporto</th>
                                     <th>Data Intervento</th>
                                     <th>Tipologia</th>
                                     <th>Tecnici</th>
@@ -238,7 +228,7 @@
                 "iDisplayLength": 15,
                 columnDefs: [
                     { targets: 1, orderable: true},
-                    { targets: 6, visible: false},
+                    { targets: 7, visible: false},
                     {
                         targets: 'action_btn',
                         orderable: false
@@ -269,7 +259,7 @@
                     },
                 ],
                 fnRowCallback: function( nRow, aData, iDisplayIndex ) {
-                    if (aData[6] == 0) {
+                    if (aData[7] == 0) {
                         $('td', nRow).each(function(){
                             $(this).addClass('text-bold');
                         });

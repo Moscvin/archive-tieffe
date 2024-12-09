@@ -20,6 +20,7 @@ class ReportRepository
     {
         return Report::orderBy('data_intervento', 'desc')->get();
     }
+    
 
     public function getById($id)
     {
@@ -75,17 +76,23 @@ class ReportRepository
                             $query->orderBy('data_intervento', $condition['dir']);
                             break;
                         }
-                        case 2: {
+                        case 2:
+                            {
+                                $query->join('interventi', 'interventi.id_intervento', '=', 'rapporti.id_intervento')
+                                ->orderBy('interventi.data', $condition['dir']);
+                                break;
+                            }
+                        case 3: {
                             $query->join('interventi', 'interventi.id_intervento', '=', 'rapporti.id_intervento')
                             ->orderBy('interventi.tipologia', $condition['dir']);
                             break;
                         }
-                        case 4: {
+                        case 5: {
                             $query->orderBy('progressivo', $condition['dir']);
 
                             break;
                         }
-                        case 5: {
+                        case 6: {
 
                             $status = [
                                 2 => 'Completato',
